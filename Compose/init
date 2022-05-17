@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+chdir(__DIR__);
+
+require_once './bootstrap/constants.php';
+require_once './bootstrap/functions.php';
+
+/* 命令行參數 */
+$option = getopt('f', []);
+
+/**
+ * **強行覆蓋檔案/資料夾旗標**  
+ * 若在命令行指定 `f` 選項，且 `filelist.php` 檔案清單中設定了原始參照檔案/資料夾，可強行覆蓋現有檔案/資料夾
+ *
+ * @var boolean
+ */
+$force = isset($option['f']) ? true : false;
+unset($option);
+
+/**
+ * **Volume mount 檔案清單**  
+ * 如不先建立這些檔案，容器啟動時會自動建立同名的「資料夾」，造成設定、log 等讀寫錯誤
+ *
+ * @var string[]
+ */ 
+$fileList = require_once './bootstrap/filelist.php';
+
+# 逐項建立檔案/資料夾
+createFileOrDirByList($fileList, $force);
+
+# 建立環境設定檔
+require_once './env';

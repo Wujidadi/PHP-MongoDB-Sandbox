@@ -1,0 +1,85 @@
+#!/usr/bin/env php
+<?php
+
+chdir(__DIR__);
+
+require_once './bootstrap/constants.php';
+require_once './bootstrap/functions.php';
+
+/* Port、IP 相關參數 */
+$beginPort      = 37980;
+$beginIPv4Byte3 = 30;
+$ipPrefix       = '10.79.0.';
+
+$var = [
+
+    /* Docker Compose 專案名稱 */
+    'COMPOSE_PROJECT_NAME' => PROJECT_NAME_KEBAB,
+    '',
+
+    /* 容器名稱前綴 */
+    'Container_Name_Prefix' => PROJECT_NAME_UPPER,
+    '',
+
+    /* 容器主機（節點）名稱前綴 */
+    'Container_Host_Prefix' => PROJECT_NAME_KEBAB,
+    '',
+
+    /* Docker Compose 路徑 */
+    'Compose_Path' => trDirSep(PROJECT_BASE . '/Compose'),
+    '',
+
+    /* Volume 路徑 */
+    'Volumn_Log'      => trDirSep(PROJECT_BASE . '/Logs'),
+    'Volumn_Main'     => trDirSep(PROJECT_BASE . '/Volumes/Main'),
+    'Volumn_Database' => trDirSep(PROJECT_BASE . '/Volumes/Database'),
+    '',
+
+    /* 映像檔版本 */
+    'MyAP_Version'    => '2.4',
+    'MongoDB_Version' => '5.0.8',
+    '',
+
+    /* Ubuntu 系統設定 */
+    'Ubuntu_Username' => 'user',
+    '',
+
+    /* Apache 伺服器設定 */
+    'App_Dir_Name' => 'application',
+    '',
+
+    /* 資料庫設定 */
+    'Database_Name'          => 'pmpdb',    // PHP-Mongo Plan Database
+    'Database_Root_Username' => 'root',
+    'Database_Root_Password' => 'PmPd!qyqeqypr',
+    'Database_Username'      => 'phpmongo',
+    'Database_Password'      => 'pMpD~16131604',
+    '',
+
+    /* 網域 */
+    'Network_Subnet' => $ipPrefix . '0/24',
+    '',
+
+    /* IP 設定 */
+    'IPv4_Main'     => $ipPrefix . $beginIPv4Byte3++,
+    'IPv4_Database' => $ipPrefix . $beginIPv4Byte3++,
+    '',
+
+    /* Port 設定 */
+    'Port_Main'     => $beginPort++,
+    'Port_Database' => $beginPort++
+
+];
+
+// 輸出 .env 檔案
+$line = '';
+foreach ($var as $key => $val)
+{
+    $line .= ($val) ? "{$key}={$val}\n" : "\n";
+}
+$line = preg_replace('/\n{1,}$/', "\n", $line);
+file_put_contents('.env', $line);
+
+echo colorText('輸出 ', CLI_COLOR_SAFE) .
+     colorText(__DIR__ . DIRECTORY_SEPARATOR . '.env', CLI_COLOR_SAFE_EM) .
+     colorText(' 設定檔', CLI_COLOR_SAFE, true);

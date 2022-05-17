@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  Main:
+    image: wujidadi/ap:${MyAP_Version}
+    container_name: ${Container_Name_Prefix}-Main
+    hostname: ${Container_Host_Prefix}-main
+    volumes:
+      - ${Compose_Path}/configs/Apache2-000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ${Volumn_Main}:/home/${Ubuntu_Username}/${App_Dir_Name}
+      - ${Volumn_Log}/syslog:/var/log/syslog
+      - ${Volumn_Log}/apache.access.log:/var/log/apache2/access.log
+      - ${Volumn_Log}/apache.error.log:/var/log/apache2/error.log
+    networks:
+      extnet:
+        ipv4_address: ${IPv4_Main}
+    ports:
+      - ${Port_Main}:80
+    depends_on:
+      - Database
+    command: >
+      bash -c "service rsyslog start;
+      cron start;
+      /usr/sbin/apache2ctl -D FOREGROUND"
+    restart: unless-stopped
+
+  Database:
+    image: mongo:${MongoDB_Version}
+    container_name: ${Container_Name_Prefix}-DB
+    hostname: ${Container_Host_Prefix}-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${Database_Root_Username}
+      - MONGO_INITDB_ROOT_PASSWORD=${Database_Root_Password}
+      - MONGO_INITDB_DATABASE=${Database_Name}
+      - MONGO_INITDB_USERNAME=${Database_Username}
+      - MONGO_INITDB_PASSWORD=${Database_Password}
+    volumes:
+      - ${Compose_Path}/configs/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ${Volumn_Database}/data/db:/data/db
+    networks:
+      extnet:
+        ipv4_address: ${IPv4_Database}
+    ports:
+      - ${Port_Database}:27017
+    restart: always
+
+networks:
+  extnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${Network_Subnet}

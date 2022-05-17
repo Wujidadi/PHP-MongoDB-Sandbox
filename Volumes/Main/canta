@@ -1,0 +1,139 @@
+#!/usr/bin/env php
+<?php
+
+chdir(__DIR__);
+
+/*
+|--------------------------------------------------------------------------
+| Canta
+|--------------------------------------------------------------------------
+|
+| Command entry point of the command line tools of the framework.
+|
+*/
+
+$option = getopt('', ['help']);
+
+if ($argc <= 1)
+{
+    showHelp();
+}
+else
+{
+    if (isset($option['help']))
+    {
+        showHelp();
+    }
+
+    switch (strtolower($argv[1]))
+    {
+        case 'test':
+            echo "\033[32mTest\033[0m\n";
+            break;
+
+        case 'init':
+        case 'initial':
+        case 'initiate':
+        case 'initialize':
+        case 'initialization':
+            system('cp configs/examples/* configs/');
+            system('composer install');
+            break;
+
+        case 'migrate':
+        case 'migration':
+            if (in_array('sqlite', $argv))
+            {
+                $command = 'php tools/migrateSQLite.php';
+            }
+            else
+            {
+                $command = 'php tools/migrate.php';
+            }
+            echo shell_exec($command);
+            break;
+
+        case 'sass2css':
+        case 'scss2css':
+        case 'sasstocss':
+        case 'scsstocss':
+        case 'sass':
+        case 'scss':
+        case 'css':
+            $command = 'php tools/sass2css.php';
+            if (in_array('-c', $argv))
+            {
+                $command .= ' -c';
+            }
+            if (in_array('--verbose', $argv))
+            {
+                $command .= ' --verbose';
+            }
+            echo shell_exec($command);
+            break;
+
+        case 'js':
+        case 'javascript':
+            $command = 'php tools/jsMinObf.php';
+            if (in_array('-c', $argv))
+            {
+                $command .= ' -c';
+            }
+            if (in_array('--verbose', $argv))
+            {
+                $command .= ' --verbose';
+            }
+            echo shell_exec($command);
+            break;
+
+        default:
+            showHelp();
+            break;
+    }
+}
+
+exit(0);
+
+
+/*
+| Helper functions
+*/
+
+/**
+ * Show usage help.
+ *
+ * @return void
+ */
+function showHelp(): void
+{
+    $myName = basename(__FILE__);
+    echo "Usage:\n";
+    echo sprintf("    %s \033[32m{tool name}\033[0m\n", $myName);
+    echo PHP_EOL;
+    echo "    Tool names:\n";
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Project initialization:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'init');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initial');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initiate');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initialize');
+    echo sprintf("       \033[33m%s\033[0m\n", 'initialization');
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Database migrating:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migrate');
+    echo sprintf("       \033[33m%s\033[0m\n", 'migration');
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'Convert SASS/SCSS to CSS:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'sass2css');
+    echo sprintf("       \033[33m%s\033[0m\n", 'scss2css');
+    echo sprintf("       \033[33m%s\033[0m\n", 'sasstocss');
+    echo sprintf("       \033[33m%s\033[0m\n", 'scsstocss');
+    echo sprintf("       \033[33m%s\033[0m\n", 'sass');
+    echo sprintf("       \033[33m%s\033[0m\n", 'scss');
+    echo sprintf("       \033[33m%s\033[0m\n", 'css');
+    echo PHP_EOL;
+    echo sprintf("     * %s\n", 'JavaScript Minimizing and Obfuscation:');
+    echo sprintf("       \033[33m%s\033[0m\n", 'js');
+    echo sprintf("       \033[33m%s\033[0m\n", 'javascript');
+    exit(0);
+}

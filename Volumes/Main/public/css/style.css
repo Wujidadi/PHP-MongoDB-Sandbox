@@ -1,0 +1,8 @@
+body.demo-mono {
+  background-color: #222;
+  color: #ddd;
+}
+body.demo-mono pre {
+  font-family: MingLiU;
+  font-size: 10.5pt;
+}
