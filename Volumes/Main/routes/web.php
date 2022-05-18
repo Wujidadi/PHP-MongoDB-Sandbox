@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\DemoController;
+use App\Controllers\MongoDemoController;
 
 $Route->map('GET', '/', function() {
     view('Demo.Home', [
@@ -9,11 +10,24 @@ $Route->map('GET', '/', function() {
     ]);
 });
 
-// $Route->map('GET', '/demo', [DemoController::getInstance(), 'main']);
+$Route->map('GET', '/demo', [DemoController::getInstance(), 'main']);
 
-$Route->map('GET', '/demo', function() {
-    view('Demo.Demo', [
-        'title' => 'Demo - ' . PROJECT_NAME,
-        'output' => 'This is a demo message.'
-    ]);
+$Route->map('GET', '/mongo/demo/count', function() {
+    MongoDemoController::getInstance()->count();
+});
+
+$Route->map('GET', '/mongo/demo/insert', function() {
+    MongoDemoController::getInstance()->insert();
+});
+
+$Route->map('GET', '/mongo/demo/select', function() {
+    MongoDemoController::getInstance()->select();
+});
+
+$Route->map('GET', '/mongo/demo/update', function() {
+    MongoDemoController::getInstance()->update();
+});
+
+$Route->map('GET', '/mongo/demo/delete', function() {
+    MongoDemoController::getInstance()->delete();
 });

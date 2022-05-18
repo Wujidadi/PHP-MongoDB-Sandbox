@@ -77,6 +77,27 @@ define('DB_CONFIG', [
 
         'PASSWORD' => ''
 
+    ],
+
+    /**
+     * Configurations of MongoDB.
+     *
+     * @var array
+     */
+    'MONGO' => [
+
+        'TYPE' => 'mongodb',
+
+        'HOST' => '10.79.0.31',
+
+        'PORT' => 27017,
+
+        'DATABASE' => 'pmpdb',
+
+        'USERNAME' => 'phpmongo',
+
+        'PASSWORD' => 'pMpD~16131604'
+
     ]
 
 ]);
