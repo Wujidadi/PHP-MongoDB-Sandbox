@@ -96,7 +96,7 @@ class MongoDemoController extends Controller
         $collectionName = 'Demo';
         $collection = MongoModel::getInstance('MONGO')->setCollection($collectionName);
         $filter = [
-            'name' => 'Kirigaya Kazuto'
+            // 'name' => 'Kirigaya Kazuto'
         ];
         $data = $collection->select($filter);
         $output = json_encode($data, 448);
