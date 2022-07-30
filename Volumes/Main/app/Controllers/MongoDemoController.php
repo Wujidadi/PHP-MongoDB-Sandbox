@@ -48,14 +48,38 @@ class MongoDemoController extends Controller
         $collectionName = 'Demo';
         $collection = MongoModel::getInstance('MONGO')->setCollection($collectionName);
         $documents = [
-            // [
-            //     'name' => 'Ayano Keiko',
-            //     'nickname' => 'Silica'
-            // ],
-            // [
-            //     'name' => 'Shinozaki Rika',
-            //     'nickname' => 'Lisbeth'
-            // ],
+            [
+                'name' => 'Kirigaya Kazuto',
+                'nickname' => 'Kirito'
+            ],
+            [
+                'name' => 'Yuuki Asuna',
+                'nickname' => 'Asuna'
+            ],
+            [
+                'name' => 'Kirigaya Suguha',
+                'nickname' => 'Leafa'
+            ],
+            [
+                'name' => 'Asada Shino',
+                'nickname' => 'Sinon'
+            ],
+            [
+                'name' => 'Ayano Keiko',
+                'nickname' => 'Silica'
+            ],
+            [
+                'name' => 'Shinozaki Rika',
+                'nickname' => 'Lisbeth'
+            ],
+            [
+                'name' => 'Tsuboi Ryoutarou',
+                'nickname' => 'Klein'
+            ],
+            [
+                'name' => 'Andrew Gilbert Mills',
+                'nickname' => 'Agil'
+            ],
             [
                 'name' => 'Kayaba Akihiko',
                 'nickname' => 'Heathcliff'
